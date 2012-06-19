@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="SnapRole" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+    <WorkerRole name="WorkerRole" vmsize="ExtraSmall">
+        <Imports>
+            <Import moduleName = "Diagnostics" />
+        </Imports>
+        <Startup/>
+        <Runtime>
+            <Environment>
+                <Variable name="ADDRESS">
+                    <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/Endpoints/Endpoint[@name='HttpIn']/@address" />
+                </Variable>
+                <Variable name="PORT">
+                    <RoleInstanceValue xpath="/RoleEnvironment/CurrentInstance/Endpoints/Endpoint[@name='HttpIn']/@port" />
+                </Variable>
+            </Environment>
+            <EntryPoint>
+                <ProgramEntryPoint commandLine="run.cmd" setReadyOnProcessStart="true" />
+            </EntryPoint>
+        </Runtime>
+        <Endpoints>
+            <InputEndpoint name="HttpIn" protocol="tcp" port="80" />
+        </Endpoints>
+        <LocalResources>
+            <LocalStorage name="haskell" cleanOnRoleRecycle="true" sizeInMB="1000" />
+        </LocalResources>
+    </WorkerRole>
+</ServiceDefinition>
